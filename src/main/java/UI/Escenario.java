@@ -4,6 +4,12 @@
  */
 package UI;
 
+import Bussiness.Control;
+import Bussiness.Game;
+import Data.Entidad;
+import Data.MapaActual;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
@@ -12,20 +18,42 @@ import javax.swing.JPanel;
  * @author donwe
  */
 public class Escenario extends JPanel{
-        private InputControl Control;
-    public Escenario() {
-        Control = new InputControl();
-        this.addKeyListener(Control);
-        this.addMouseListener(Control);
-        this.addMouseMotionListener(Control);
+
+    private InputControl input;
+    private MapaActual mapa;
+    private Game game;
+    
+    
+    public Escenario(Control control,MapaActual mapa, Game game) {
+        
+        input = new InputControl(control);
+        this.addKeyListener(input);
+        this.mapa=mapa;
+        this.game = game;
+        
+        setPanelSize();
+        
     }
     
+    private void setPanelSize() {
+        Dimension size = new Dimension(1080, 720);
+        setMinimumSize(size);
+        setPreferredSize(size);
+        setMaximumSize(size);
+
+    }
+    
+    
+    
+
     @Override
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.fillRect(300, 300, 50, 50);
-    
-    
+        g.setColor(Color.red);
+        for (Entidad entidad : mapa.getEntidades()) {
+            g.fillRect(entidad.getPosición()[0], 300-entidad.getPosición()[1], entidad.getArea()[0][1], entidad.getArea()[0][0]);        
+        }
+        game.render(g);
+        
     }
-    
 }
